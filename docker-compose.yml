@@ -1,0 +1,12 @@
+services:
+  header-capture:
+    build: .
+    container_name: header_capture
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - header_capture_data:/data
+
+volumes:
+  header_capture_data:

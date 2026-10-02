@@ -1,0 +1,16 @@
+.git
+.gitignore
+.dockerignore
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+data/
+*.db
+*.db-wal
+*.db-shm
+.DS_Store
+README.md
+docker-compose.yml
+test.sh

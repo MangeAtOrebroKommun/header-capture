@@ -1,0 +1,16 @@
+# Compose-fil för Dokploy.
+# - Ingen container_name (Dokploy hanterar namn; annars fungerar inte loggar/metrics).
+# - Inga publicerade portar: lägg till en domän i Dokploy (fliken Domains)
+#   med service "header-capture" och port 8000, så routar Traefik dit.
+# Lokalt används docker-compose.yml som vanligt.
+services:
+  header-capture:
+    build: .
+    restart: unless-stopped
+    expose:
+      - "8000"
+    volumes:
+      - header_capture_data:/data
+
+volumes:
+  header_capture_data:
