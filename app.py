@@ -209,8 +209,7 @@ PAGE = """<!doctype html>
   <div class="line">
     <button onclick="location.reload()">Uppdatera</button>
     <label class="meta"><input type="checkbox" id="auto"> auto (5 s)</label>
-    <form method="post" action="/clear" style="margin:0"
-          onsubmit="return confirm('Rensa all historik?')">
+    <form method="post" action="/clear" style="margin:0" id="clear-form">
       <button class="danger" type="submit">Rensa historik</button>
     </form>
   </div>
@@ -253,7 +252,19 @@ PAGE = """<!doctype html>
   const box = document.getElementById('auto');
   box.checked = location.hash === '#auto';
   box.onchange = () => { location.hash = box.checked ? 'auto' : ''; };
-  setInterval(() => { if (box.checked) location.reload(); }, 5000);
+
+  // Medan bekräftelsedialogen är öppen, och medan rensningen skickas, får
+  // auto-uppdateringen inte ladda om sidan. Ett reload() avbryter annars
+  // formulärets POST /clear innan det hunnit skickas.
+  let clearing = false;
+  document.getElementById('clear-form').addEventListener('submit', (e) => {
+    clearing = true;
+    if (!confirm('Rensa all historik?')) {
+      clearing = false;
+      e.preventDefault();
+    }
+  });
+  setInterval(() => { if (box.checked && !clearing) location.reload(); }, 5000);
 </script>
 </body>
 </html>
